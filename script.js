@@ -21,123 +21,142 @@ function attachBuyEvents() {
       const parentOfClicked = event.target.parentElement;
       parentOfClicked.classList.toggle("sale");
 
-      // getting of the clicked product
+      // getting details of the clicked product
       const clickedId = parentOfClicked.getAttribute("data-id");
       const clickedProductName =
         parentOfClicked.querySelector("h2").textContent;
-      const clickedPrice = parentOfClicked.querySelector(".price").textContent;
-      const clickedQuantity = parentOfClicked.querySelector(".quantity").value;
+      const clickedPrice = parseFloat(parentOfClicked.querySelector(".price").textContent);
+      const clickedQuantity = parseInt(parentOfClicked.querySelector(".quantity").value);
       // console.log({idOfClicked, productName, priceOfClicked, quantityOfClicked});
 
-      // creating new table row
-      const table = document.querySelector("#cart table thead");
-      const newRow = document.createElement("tr");
-      newRow.setAttribute("idNew", clickedId);
-      table.appendChild(newRow);
 
-      addCells();
+      // select the table section where we are going to add the new row
+      const tableBody = document.querySelector("#cart table tbody");
 
-      // creating data cells, adding text to them, and adding them to the new row
-      function addCells() {
-        const id = document.createElement("td");
-        id.textContent = clickedId;
+      // variable to track rows that already exist
+      let existingRow = null;
 
-        const productName = document.createElement("td");
-        productName.textContent = clickedProductName;
 
-        const quantity = document.createElement("td");
-        quantity.textContent = parseInt(clickedQuantity);
+      // loop through the rows to find if the row we want to add already exists
+      const rows = tableBody.querySelectorAll("tr");
+      for (let row of rows) {
+        // checking if a certain row with the data-id of the clicked product exists
+        if (row.getAttribute("data-id") === clickedId) {
+          existingRow = row;
+          break;
+        }
+      }
 
-        const price = document.createElement("td");
-        price.textContent = parseInt(clickedPrice);
+      if (existingRow) {
+        updateCells(existingRow, clickedQuantity, clickedPrice); // update cells of the existing row
+      } else {
+        addCells(clickedId, clickedProductName, clickedQuantity, clickedPrice); // add cells to the new row and add the new row to the table body as well
+      }
 
-        const total = document.createElement("td");
-        total.textContent = price.textContent * quantity.textContent;
+      // function that updates the existing row
+      function updateCells(row, quantityToAdd, price) {
+        //updating the quantity
+        const currentQuantity = parseInt(row.children[2].textContent); // third cell in the row
+        const newQuantity = currentQuantity + quantityToAdd;
+        row.children[2].textContent = newQuantity;
 
-        const cells = [id, productName, quantity, price, total];
+        // updating the total
+        const newTotal = (newQuantity * price).toFixed(2);
+        row.children[4].textContent = newTotal;
+         
+        // updating the cumulative totals
+        updateCumulativeTotals();
+      }
 
+      // function that adds cells to a non-existing row and adds that row to the table body
+      function addCells(id, productName, quantity, price) {
+        // creating the new row with a given data-id attribute
+        const newRow = document.createElement("tr");
+        newRow.setAttribute("data-id", id);
+
+        // create an array to store the new cells
+        const cells = [];
+
+        // creating cells to add to the new row and adding contents to them
+        const idCell = document.createElement("td"); // cell for id
+        idCell.textContent = id;
+        cells.push(idCell);
+
+        const productNameCell = document.createElement("td"); // cell for name of the product
+        productNameCell.textContent = productName;
+        cells.push(productNameCell);
+
+        const quantityCell = document.createElement("td"); // cell for quantity data
+        quantityCell.textContent = quantity;
+        cells.push(quantityCell);
+
+        const priceCell = document.createElement("td"); // cell for price of the product
+        priceCell.textContent = price;
+        cells.push(priceCell);
+
+        const totalCell = document.createElement('td');
+        const total = (price * quantity).toFixed(2)
+        totalCell.textContent = total;
+        totalCell.classList.add('total')
+        cells.push(totalCell);
+
+
+        // deleting rows
+        // creating delete link
+        const deleteLink = document.createElement('a');
+        const deleteCell = document.createElement('td');
+        deleteLink.setAttribute('href', '#');
+
+        deleteLink.addEventListener('click', function(event) {
+          event.preventDefault();
+          newRow.remove();
+          updateCumulativeTotals();
+        })
+        
+
+        // creating delete image
+        const deleteIcon = document.createElement('img');
+        deleteIcon.src = "./cropped-favicon.webp";
+        deleteIcon.alt = "deleting icon";
+        deleteIcon.width = "15";
+        deleteIcon.height = "15";
+        // adding the delete icon image to the delete link
+        deleteLink.appendChild(deleteIcon);
+
+        // adding the delete link to the delete cell
+        deleteCell.appendChild(deleteLink);
+        cells.push(deleteCell);
+    
+        // adding the cells to the new row using a loop
         for (let cell of cells) {
           newRow.appendChild(cell);
         }
+
+
+        // adding the new row to the table body
+        tableBody.appendChild(newRow);
+
+        // updating the cumulative totals
+        updateCumulativeTotals();
       }
-      function updateCells() {
-        quantity.textContent = quantity.textContent + 1;
-        total.textContent = price.textContent * quantity.textContent;
+
+      function updateCumulativeTotals () {
+        let allTotals = document.getElementsByClassName('total')
+        let totalAmount = 0
+        for(let i = 0; i < allTotals.length; i++){
+          totalAmount += Number(allTotals[i].textContent)
+        }
+
+        let totalsField = document.querySelector('#cart table tfoot tr').children[1];
+        if(totalsField) totalsField.textContent = totalAmount
       }
+
+      function removeRow(row) {
+
+      }
+     
     });
   }
-  // checking if a row already exists, and if so, we update it instead of adding it to the cart
 }
+
 attachBuyEvents();
-// function attachBuyEvents() {
-//     const buttons = document.getElementById('products').querySelectorAll('button');
-//     for (let button of buttons) {
-//         button.addEventListener('click', function (event) {
-
-//             // getting the data for the clicked parent element
-//             const parent = event.target.parentElement;
-//             const attributeId = parent.getAttribute('data-id');
-//             const productName = parent.querySelector('h2').textContent;
-//             const price = parseFloat(parent.querySelector('.price').textContent);
-//             const quantity = parseInt(parent.querySelector('.quantity').value);
-
-//             // selecting the table element insided the cart section and the table rows as well
-//             const table = document.querySelector('#cart table');
-//             let tableRows = table.querySelectorAll('tr');
-//             let productExists = false;
-
-//             if (tableRows.length > 1) {
-//                 for (let row of tableRows) {
-//                     const rowProductName = row.querySelector('td:nth-child(2)'); // Assuming the second column is the name
-//                     if (rowProductName && rowProductName.textContent === productName) {
-//                         // If the product already exists, increment the quantity and update the total
-//                         const rowQuantityCell = row.querySelector('td:nth-child(3)'); // Assuming the third column is quantity
-//                         const rowTotalCell = row.querySelector('td:nth-child(5)'); // Assuming the fifth column is total
-
-//                         let currentQuantity = parseInt(rowQuantityCell.textContent);
-//                         let newQuantity = currentQuantity + quantity;
-//                         rowQuantityCell.textContent = newQuantity;
-
-//                         let newTotal = newQuantity * price;
-//                         rowTotalCell.textContent = newTotal;
-
-//                         productExists = true;
-//                         break;
-//                     }
-//                 }
-//             }
-
-//             if (productExists === false) {
-//                 // If product does not exist in the table, create a new row
-//                 const newRow = document.createElement('tr');
-//                 newRow.setAttribute('data-id', attributeId);
-
-//                 // Creating new cells
-//                 const id = document.createElement('td');
-//                 const name = document.createElement('td');
-//                 const quantityCell = document.createElement('td');
-//                 const priceCell = document.createElement('td');
-//                 const total = document.createElement('td');
-
-//                 // Appending cells to the new row
-//                 newRow.appendChild(id);
-//                 newRow.appendChild(name);
-//                 newRow.appendChild(quantityCell);
-//                 newRow.appendChild(priceCell);
-//                 newRow.appendChild(total);
-
-//                 // Populating the cells with data
-//                 id.textContent = attributeId;
-//                 name.textContent = productName;
-//                 quantityCell.textContent = quantity;
-//                 priceCell.textContent = price.toFixed(2);
-//                 total.textContent = (quantity * price).toFixed(2);
-
-//                 // Adding the new row to the table
-//                 table.querySelector('thead').appendChild(newRow);
-//             }
-//         });
-//     }
-// }
-
-// attachBuyEvents();
