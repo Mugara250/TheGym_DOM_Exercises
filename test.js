@@ -1,58 +1,74 @@
 function attachBuyEvents() {
-    // selecting all buttons in the products section
-    const buttons = document.querySelectorAll("#products button");
-  
-    // adding the event listener to them
-    for (let button of buttons) {
-      button.addEventListener("click", function (event) {
-        // accessing the parent of the clicked product
-        const parentOfClicked = event.target.parentElement;
-        parentOfClicked.classList.toggle("sale");
-  
-        // getting of the clicked product
-        const clickedId = parentOfClicked.getAttribute("data-id");
-        const clickedProductName =
-          parentOfClicked.querySelector("h2").textContent;
-        const clickedPrice = parentOfClicked.querySelector(".price").textContent;
-        const clickedQuantity = parentOfClicked.querySelector(".quantity").value;
-        // console.log({idOfClicked, productName, priceOfClicked, quantityOfClicked});
-  
-        // creating new table row
-        const table = document.querySelector("#cart table thead");
-        const newRow = document.createElement("tr");
-        newRow.setAttribute("idNew", clickedId);
-        table.appendChild(newRow);
-  
-        addCells();
-  
-        // creating data cells, adding text to them, and adding them to the new row
-        function addCells() {
-          const id = document.createElement("td");
-          id.textContent = clickedId;
-  
-          const productName = document.createElement("td");
-          productName.textContent = clickedProductName;
-  
-          const quantity = document.createElement("td");
-          quantity.textContent = parseInt(clickedQuantity);
-  
-          const price = document.createElement("td");
-          price.textContent = parseInt(clickedPrice);
-  
-          const total = document.createElement("td");
-          total.textContent = price.textContent * quantity.textContent;
-  
-          const cells = [id, productName, quantity, price, total];
-  
-          for (let cell of cells) {
-            newRow.appendChild(cell);
-          }
-        }
-        function updateCells() {
-          quantity.textContent = quantity.textContent + 1;
-          total.textContent = price.textContent * quantity.textContent;
-        }
-      });
-    }
-  }
-  attachBuyEvents();
+  const buttons = document.querySelectorAll("#products button");
+  buttons.forEach((button) => {
+    button.addEventListener("click", function (event) {
+      // accessing the parent of the clicked product
+      const parentOfClicked = event.target.parentElement;
+      // getting the clicked product
+      const clickedDataObject = {
+        clickedId: parentOfClicked.getAttribute("data-id"),
+        clickedProductName: parentOfClicked.querySelector("h2").textContent,
+        clickedPrice: parseInt(
+          parentOfClicked.querySelector(".price").textContent
+        ),
+        clickedQuantity: parseInt(
+          parentOfClicked.querySelector(".quantity").value
+        ),
+      };
+      // Find the cart table
+      const tableBody = document.querySelector("#cart table tbody");
+      // Check if the product is already in the cart
+      const existingRow = Array.from(tableBody.rows).find(
+        (row) =>
+          row.cells[1].textContent === clickedDataObject.clickedProductName
+      );
+      existingRow
+        ? updateExistingRow(existingRow, clickedDataObject)
+        : addNewRow(tableBody, clickedDataObject);
+
+      updateCartTotal();
+    });
+  });
+}
+
+function addNewRow(
+  tableBody,
+  { clickedId, clickedPrice, clickedProductName, clickedQuantity }
+) {
+  const newRow = tableBody.insertRow();
+  newRow.setAttribute("data-id", clickedId);
+  // Create and populate individual cells
+  const newIdDataCell = newRow.insertCell(0);
+  newIdDataCell.textContent = clickedId;
+
+  const newProductDataCell = newRow.insertCell(1);
+  newProductDataCell.classList.add("cart-product");
+  newProductDataCell.textContent = clickedProductName;
+
+  const newQuantityDataCell = newRow.insertCell(2);
+  newQuantityDataCell.classList.add("cart-quantity");
+  newQuantityDataCell.textContent = clickedQuantity;
+
+  const newPriceDataCell = newRow.insertCell(3);
+  newPriceDataCell.classList.add("cart-price");
+
+  newPriceDataCell.textContent = clickedPrice;
+
+  const newTotalDataCell = newRow.insertCell(4);
+  newTotalDataCell.classList.add("cart-total");
+  newTotalDataCell.textContent = clickedQuantity * clickedPrice;
+  document.querySelector("#cart table tbody").appendChild(newRow);
+}
+
+function updateExistingRow(existingRow, { clickedQuantity, clickedPrice }) {
+  // Update the existing row's quantity and total
+  const quantityCell = existingRow.cells[2];
+  const totalCell = existingRow.cells[4];
+  const newQuantity = parseInt(quantityCell.textContent) + clickedQuantity;
+  quantityCell.textContent = newQuantity;
+  totalCell.textContent = newQuantity * clickedPrice;
+}
+function updateCartTotal() {
+  // Update the total in the footer
+}
+attachBuyEvents();
