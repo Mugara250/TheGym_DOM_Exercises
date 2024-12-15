@@ -17,7 +17,6 @@ addButton.addEventListener("click", function (event) {
   // creating the label element
   const labelElement = document.createElement("label");
 
-
   // creating the input element with type check box
   const inputElementList = document.createElement('input');
   // adding the attributes to the input element
@@ -36,7 +35,6 @@ addButton.addEventListener("click", function (event) {
 
   // adding the text node to the label element
   labelElement.appendChild(textNode);
-
 
   // styling the list item
   listItem.style.textAlign = "center";
@@ -63,5 +61,4 @@ addButton.addEventListener("click", function (event) {
   // adding the list item into the to do list
   toDoList.appendChild(listItem);
 
-  // 
 });
