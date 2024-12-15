@@ -1,0 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+    color:bisque;
+    background-color: black;
+}
+
+h2 {
+    margin: 20px;
+    /* text-align: center; */
+}
+
+/*styling the timer div*/
+#timer-container {
+    margin: 100px;
+    text-align: center;
+}
+
+#timer {
+    font-size: 100px;
+    
+}
+
+button {
+    margin: 10px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 7px;
+    color: bisque;
+    background-color: rgb(33, 32, 32);
+    transition: backgroung-color 0.3s;
+}
+
+button:hover {
+    background-color: rgb(55, 59, 59);
+}
+
+button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
