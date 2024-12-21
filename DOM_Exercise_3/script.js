@@ -1,49 +1,88 @@
-// document.addEventListener("DOMContentLoaded", () => {
-//     let timeRemaining = 10; // Initial countdown time
-//     const timerElement = document.getElementById("timer");
-//     const buttons = document.querySelectorAll("button");
-  
-//     // Update the timer display
-//     function updateTimerDisplay() {
-//       timerElement.textContent = timeRemaining;
-//     }
-  
-//     // Hide buttons
-//     function hideButtons() {
-//       buttons.forEach(button => (button.style.display = "none"));
-//     }
-  
-//     // Countdown logic
-//     const countdown = setInterval(() => {
-//       timeRemaining--;
-  
-//       if (timeRemaining <= 0) {
-//         clearInterval(countdown);
-//         timeRemaining = 0; // Ensure timer doesn't go negative
-//         updateTimerDisplay();
-//         hideButtons();
-//       } else {
-//         updateTimerDisplay();
-//       }
-//     }, 1000);
-  
-//     // Add event listeners to buttons
-//     document.getElementById("btn-5").addEventListener("click", () => {
-//       timeRemaining += 5;
-//       updateTimerDisplay();
-//     });
-  
-//     document.getElementById("btn-10").addEventListener("click", () => {
-//       timeRemaining += 10;
-//       updateTimerDisplay();
-//     });
-  
-//     document.getElementById("btn-15").addEventListener("click", () => {
-//       timeRemaining += 15;
-//       updateTimerDisplay();
-//     });
-  
-//     // Initialize the timer display
-//     updateTimerDisplay();
-//   });
+// Applying functional programming
+
+document.addEventListener('DOMContentLoaded', function() {
+    let timerCount = document.getElementById("timer"); // element that'll display the time
+    totalTime = 10; // initial time for the countdown
+    let buttons = document.getElementsByTagName('button'); // selecting buttons that'll be
+    // targeted for removal
+    let timerID; // timeout id of the setInterval() window method
+
+    // updating the timer display
+    function updateTimerDisplay () {
+        timerCount.textContent = totalTime;
+    }
+
+    // removing the buttons
+    function removeButtons() {
+        Array.from(buttons).forEach(element => {
+            element.style.display = 'none';
+        });
+    }
+
+    // countdown logic
+    timerID = window.setInterval(function () {
+        totalTime --;
+
+        // ensure that the countdown doesn't reach negative
+        if (totalTime<=0) {
+            updateTimerDisplay();
+            removeButtons(); // clear or remove the buttons
+            window.clearInterval(timerID); // stop the countdown
+        } else {
+            updateTimerDisplay();
+        }
+    }, 1500)
+
+    // adding more seconds to the timer
+    document.querySelector('#btn-five').addEventListener('click', function() {
+        totalTime += 5;
+        updateTimerDisplay();
+    })
+
+    document.querySelector('#btn-ten').addEventListener('click', function() {
+        totalTime += 10;
+        updateTimerDisplay();
+    })
+
+    document.querySelector('#btn-fifteen').addEventListener('click', function () {
+        totalTime += 15;
+        updateTimerDisplay();
+    })
+
+    updateTimerDisplay(); // initialize the timer
+})
+
+
+
+timerCount.textContent = timeTotal;
+
+let timerID = window.setInterval(countDownTimer, 1000);
+
+function countDownTimer() {
+    timeTotal--;
+    if (timeTotal >= 0) {
+      timerCount.textContent = timeTotal;
+    } else {
+    //   stopTimer(timerID);
+        window.clearInterval(timerID);
+    }
+}
+
+// function updateTimerDisplay(time) {
+//     timerCount.textContent = time;
+// }
+// updateTimerDisplay(timeTotal)
+
+document.getElementById('btn-five').addEventListener('click', function addFive() {
+    timeTotal += 6;
+})
+
+document.getElementById('btn-ten').addEventListener('click', function addTen() {
+    timeTotal += 11;
+})
+
+document.getElementById('btn-fifteen').addEventListener('click', function addFifteen() {
+    timeTotal += 16;
+})
+
 
