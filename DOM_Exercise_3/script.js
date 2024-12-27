@@ -51,38 +51,3 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateTimerDisplay(); // initialize the timer
 })
-
-
-
-timerCount.textContent = timeTotal;
-
-let timerID = window.setInterval(countDownTimer, 1000);
-
-function countDownTimer() {
-    timeTotal--;
-    if (timeTotal >= 0) {
-      timerCount.textContent = timeTotal;
-    } else {
-    //   stopTimer(timerID);
-        window.clearInterval(timerID);
-    }
-}
-
-// function updateTimerDisplay(time) {
-//     timerCount.textContent = time;
-// }
-// updateTimerDisplay(timeTotal)
-
-document.getElementById('btn-five').addEventListener('click', function addFive() {
-    timeTotal += 6;
-})
-
-document.getElementById('btn-ten').addEventListener('click', function addTen() {
-    timeTotal += 11;
-})
-
-document.getElementById('btn-fifteen').addEventListener('click', function addFifteen() {
-    timeTotal += 16;
-})
-
-
