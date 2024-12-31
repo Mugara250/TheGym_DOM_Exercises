@@ -1,1 +1,23 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
 
+h1 {
+    text-align: center;
+    margin: 10px;
+}
+
+.input {
+    text-align: center;
+}
+
+#first-input, #second-input {
+    margin: 10px;
+}
+
+input {
+    width: 100px;
+    height: 30px;
+}
