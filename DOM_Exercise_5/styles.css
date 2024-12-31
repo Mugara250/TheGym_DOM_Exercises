@@ -1,0 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#text {
+    color: red;
+    font-size: 1.5rem;
+    margin: 20px;
+}
+
+#jsstyle {
+    margin: 20px;
+    width: 70px;
+    height: 30px;
+    font-size: large;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: antiquewhite;
+    cursor: pointer;
+}
