@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#first-name,
+#last-name {
+  margin: 20px;
+  text-align: center;
+}
+
+input {
+  height: 25px;
+}
+
+#submit-button {
+  text-align: center;
+}
+
+#submit {
+  width: 60px;
+}
