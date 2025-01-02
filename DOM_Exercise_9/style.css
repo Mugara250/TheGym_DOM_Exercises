@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+textarea {
+  margin: 10px 30px;
+}
+
+#buttons {
+  margin: 10px 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  width: 200px;
+  height: 30px;
+  margin: 5px 0;
+  font-size: 1rem;
+}

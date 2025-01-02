@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#link {
+  margin: 30px;
+  text-align: center;
+}
+
+#w3r {
+  margin: 50px;
+  font-size: 2rem;
+}
+
+#get-attributes {
+  margin: 50px;
+  width: 250px;
+  height: 40px;
+  font-size: 1rem;
+}
