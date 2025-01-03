@@ -24,7 +24,7 @@ const activities = [
 ];
 document
   .querySelector("#create-table")
-  .addEventListener("click", function (event) {
+  .addEventListener("click", function createTable(event) {
     // thead section
     const emptyCell = document.createElement("td");
     emptyCell.style.width = "100px";
@@ -61,4 +61,9 @@ document
     table.setAttribute("border", "2");
     table.style.margin = "30px";
     document.body.appendChild(table);
+
+    // removing the registered event
+    document
+      .querySelector("#create-table")
+      .removeEventListener("click", createTable);
   });
